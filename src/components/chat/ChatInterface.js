@@ -4,10 +4,9 @@ import { Input } from "../ui/input";
 import { Send, Loader2, X } from "lucide-react";
 import { InvokeLLM } from "../../integrations/Core";
 import MessageBubble from "./MessageBubble";
-import { motion, AnimatePresence } from "framer-motion";
-import { useSwipeable } from "react-swipeable";
+import { motion } from "framer-motion";
 
-export default function ChatInterface({ messages, onSendMessage, showOverlay, setShowOverlay }) {
+export default function ChatInterface({ messages, onSendMessage, onClose }) {
   const [inputText, setInputText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
@@ -39,84 +38,61 @@ export default function ChatInterface({ messages, onSendMessage, showOverlay, se
       onSendMessage("I'm sorry, I encountered an error. Please try again!", true);
     } finally {
       setIsLoading(false);
-      inputRef.current?.focus(); // ✅ Refocus the input textbox
+      inputRef.current?.focus();
     }
   };
 
   const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
+    if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
       handleSend();
     }
   };
 
-  const swipeHandlers = useSwipeable({
-    onSwipedDown: () => setShowOverlay(false),
-    onSwipedRight: () => setShowOverlay(false),
-    preventDefaultTouchmoveEvent: true,
-    trackTouch: true,
-    trackMouse: false
-  });
-
-  const handleFocus = () => setShowOverlay(true);
-
   return (
-    <div className="relative h-full w-full overflow-x-hidden">
-      {/* Chat History Overlay - opens from bottom */}
-      <AnimatePresence>
-        {showOverlay && (
+    <div className="h-full w-full bg-black border-t border-slate-200/50">
+      {/* Close Button */}
+      <div className="absolute top-2 right-4 z-[10000]">
+        <Button
+          variant="ghost"
+          onClick={onClose}
+          className="text-white hover:text-red-400 p-2"
+        >
+          <X className="w-5 h-5" />
+        </Button>
+      </div>
+
+      {/* Chat History */}
+      <div className="h-[calc(20vh-64px)] overflow-y-auto px-4 pt-8 pb-2 space-y-3">
+        {messages.map((message) => (
+          <MessageBubble key={message.id} message={message} />
+        ))}
+
+        {isLoading && (
           <motion.div
-            {...swipeHandlers}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            className="fixed bottom-[64px] left-0 w-full h-1/2 bg-slate-950/95 z-[9999] rounded-t-2xl shadow-xl"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="flex justify-start"
           >
-            {/* Fixed Close Button */}
-            <div className="fixed bottom-[calc(50%)] right-5 z-[10000]">
-              <Button
-                variant="ghost"
-                onClick={() => setShowOverlay(false)}
-                className="text-white hover:text-red-400 p-2"
-              >
-                <X className="w-5 h-5" />
-              </Button>
-            </div>
-
-            {/* Scrollable Messages */}
-            <div className="h-full overflow-y-auto px-4 pt-4 pb-24 space-y-3">
-              {messages.map((message) => (
-                <MessageBubble key={message.id} message={message} />
-              ))}
-
-              {isLoading && (
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  className="flex justify-start"
-                >
-                  <div className="bg-slate-100 rounded-2xl rounded-bl-md px-4 py-3 max-w-xs">
-                    <div className="flex items-center gap-2 text-slate-600">
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      <span className="text-sm">ChatGPT is thinking...</span>
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-              <div ref={messagesEndRef} />
+            <div className="bg-slate-100 rounded-2xl rounded-bl-md px-4 py-3 max-w-xs">
+              <div className="flex items-center gap-2 text-slate-600">
+                <Loader2 className="w-4 h-4 animate-spin" />
+                <span className="text-sm">ChatGPT is thinking...</span>
+              </div>
             </div>
           </motion.div>
         )}
-      </AnimatePresence>
+        <div ref={messagesEndRef} />
+      </div>
+
       {/* Input Area */}
-      <div className="fixed bottom-0 left-0 right-0 bg-slate-950 text-slate-950 p-4 border-t border-slate-200/50 z-[10000]">
+      <div className="absolute bottom-0 left-0 right-0 bg-slate-950 p-4 z-[10000]">
         <div className="flex gap-3 items-end w-full max-w-full box-border">
           <div className="flex-1">
             <Input
               ref={inputRef}
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
-              onFocus={handleFocus}
               onKeyPress={handleKeyPress}
               placeholder="Ask me anything..."
               className="bg-slate-950 text-slate-50 px-4 py-3 text-base flex h-10 w-full max-w-full border ring-offset-background file:border-0 file:bg-transparent file:text-base file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 border-slate-200 focus:border-blue-400 rounded-2xl resize-none"

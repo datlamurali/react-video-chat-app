@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import VideoPlayer from "../components/video/VideoPlayer";
 import ChatInterface from "../components/chat/ChatInterface";
-import MessageBubble from "../components/chat/MessageBubble";
-
 
 export default function VideoChat() {
   const [messages, setMessages] = useState([
@@ -15,7 +13,7 @@ export default function VideoChat() {
   ]);
 
   const [videoUrl, setVideoUrl] = useState("https://youtu.be/6pxRHBw-k8M");
-  const [showOverlay, setShowOverlay] = useState(false);
+  const [chatVisible, setChatVisible] = useState(false);
 
   const addMessage = (text, isAi = false) => {
     const newMessage = {
@@ -28,20 +26,27 @@ export default function VideoChat() {
   };
 
   return (
-    <div className="relative h-screen w-screen bg-black overflow-hidden">
-      {/* Video Player */}
-      <div className="absolute inset-0 z-0">
+    <div className="h-screen w-screen flex flex-col bg-black overflow-hidden">
+      {/* Video Player - 80% */}
+      <div className="h-[80vh]">
         <VideoPlayer videoUrl={videoUrl} onVideoChange={setVideoUrl} />
       </div>
 
-      {/* Chat Input */}
-      <div className="absolute bottom-0 left-0 right-0 z-20 bg-slate-950 p-4 border-t border-slate-200/50">
-        <ChatInterface
-          messages={messages}
-          onSendMessage={addMessage}
-          showOverlay={showOverlay}
-          setShowOverlay={setShowOverlay}
-        />
+      {/* Tap Area - 20% */}
+      <div className="h-[20vh] relative">
+        {!chatVisible ? (
+          <div
+            className="h-full w-full bg-black flex items-center justify-center text-white text-sm cursor-pointer"
+            onClick={() => setChatVisible(true)}
+          >
+          </div>
+        ) : (
+          <ChatInterface
+            messages={messages}
+            onSendMessage={addMessage}
+            onClose={() => setChatVisible(false)}
+          />
+        )}
       </div>
     </div>
   );
