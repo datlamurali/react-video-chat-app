@@ -34,15 +34,6 @@ export default function VideoChat() {
         <VideoPlayer videoUrl={videoUrl} onVideoChange={setVideoUrl} />
       </div>
 
-      {/* Chat History Overlay */}
-      {showOverlay && (
-        <div className="absolute top-0 left-0 w-full h-1/2 z-10 overflow-y-auto bg-slate-950/95 px-4 pt-4 pb-24 rounded-b-2xl shadow-xl">
-          {messages.map((message) => (
-            <MessageBubble key={message.id} message={message} />
-          ))}
-        </div>
-      )}
-
       {/* Chat Input */}
       <div className="absolute bottom-0 left-0 right-0 z-20 bg-slate-950 p-4 border-t border-slate-200/50">
         <ChatInterface
