@@ -35,7 +35,7 @@ export default function VideoChat() {
       </div>
       
       {/* Chat Section - 20% */}
-      <div className="h-1/5 border-t border-slate-200/50 backdrop-blur-sm bg-white/80">
+      <div className="h-1/5 border-t border-slate-200/50 backdrop-blur-sm bg-black/80">
         <ChatInterface 
           messages={messages}
           onSendMessage={addMessage}
