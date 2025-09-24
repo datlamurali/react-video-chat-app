@@ -33,28 +33,28 @@ export default function VideoPlayer({ videoUrl, onVideoChange }) {
   };
 
   const onReady = (event) => {
-  event.target.setPlaybackQuality('hd2160');
-};
+    event.target.setPlaybackQuality('hd2160');
+  };
 
-const opts = {
-  height: "100%",
-  width: "100%",
-  playerVars: {
-    autoplay: 0,
-    playsinline: 1,
-    rel: 0,
-    modestbranding: 0,
-    autohide: 1,
-    showinfo: 1,
-    fs: 1,
-    vq: "hd2160" // YouTube may ignore this, but it's worth including
-  }
-};
+  const opts = {
+    height: "100%",
+    width: "100%",
+    playerVars: {
+      autoplay: 0,
+      playsinline: 1,
+      rel: 0,
+      modestbranding: 0,
+      autohide: 1,
+      showinfo: 1,
+      fs: 1,
+      vq: "hd2160" // YouTube may ignore this, but it's worth including
+    }
+  };
 
   return (
     <div className="relative h-full bg-slate-900 rounded-b-3xl overflow-hidden shadow-2xl">
       {videoId ? (
-        <YouTube videoId={videoId} opts={opts}  onReady={onReady} className="w-full h-full" />
+        <YouTube videoId={videoId} opts={opts} className="w-full h-full" />
       ) : (
         <div className="h-full flex items-center justify-center text-white">
           <div className="text-center">

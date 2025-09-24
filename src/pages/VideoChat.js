@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import VideoPlayer from "../components/video/VideoPlayer";
 import ChatInterface from "../components/chat/ChatInterface";
+import MessageBubble from "../components/chat/MessageBubble";
+
 
 export default function VideoChat() {
   const [messages, setMessages] = useState([
@@ -13,6 +15,7 @@ export default function VideoChat() {
   ]);
 
   const [videoUrl, setVideoUrl] = useState("https://youtu.be/6pxRHBw-k8M");
+  const [showOverlay, setShowOverlay] = useState(false);
 
   const addMessage = (text, isAi = false) => {
     const newMessage = {
@@ -26,20 +29,27 @@ export default function VideoChat() {
 
   return (
     <div className="relative h-screen w-screen bg-black overflow-hidden">
-      {/* Fullscreen Video */}
+      {/* Video Player */}
       <div className="absolute inset-0 z-0">
-        <VideoPlayer 
-          videoUrl={videoUrl} 
-          onVideoChange={setVideoUrl}
-          className="w-full h-full object-cover"
-        />
+        <VideoPlayer videoUrl={videoUrl} onVideoChange={setVideoUrl} />
       </div>
 
-      {/* Chat Interface overlays on top of video */}
-      <div className="absolute inset-0 z-10 flex flex-col justify-end pointer-events-none">
-        <ChatInterface 
+      {/* Chat History Overlay */}
+      {showOverlay && (
+        <div className="absolute top-0 left-0 w-full h-1/2 z-10 overflow-y-auto bg-slate-950/95 px-4 pt-4 pb-24 rounded-b-2xl shadow-xl">
+          {messages.map((message) => (
+            <MessageBubble key={message.id} message={message} />
+          ))}
+        </div>
+      )}
+
+      {/* Chat Input */}
+      <div className="absolute bottom-0 left-0 right-0 z-20 bg-slate-950 p-4 border-t border-slate-200/50">
+        <ChatInterface
           messages={messages}
           onSendMessage={addMessage}
+          showOverlay={showOverlay}
+          setShowOverlay={setShowOverlay}
         />
       </div>
     </div>

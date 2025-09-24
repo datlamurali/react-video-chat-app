@@ -7,10 +7,10 @@ import MessageBubble from "./MessageBubble";
 import { motion, AnimatePresence } from "framer-motion";
 import { useSwipeable } from "react-swipeable";
 
-export default function ChatInterface({ messages, onSendMessage }) {
+
+export default function ChatInterface({ messages, onSendMessage, showOverlay, setShowOverlay }) {
   const [inputText, setInputText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [showOverlay, setShowOverlay] = useState(false);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -58,6 +58,8 @@ export default function ChatInterface({ messages, onSendMessage }) {
     trackMouse: false
   });
 
+  const handleFocus = () => setShowOverlay(true);
+  
   return (
     <div className="relative h-full w-full overflow-x-hidden">
       {/* Chat History Overlay */}
@@ -116,7 +118,7 @@ export default function ChatInterface({ messages, onSendMessage }) {
               ref={inputRef}
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
-              onFocus={() => setShowOverlay(true)}
+              onFocus={handleFocus}
               onKeyPress={handleKeyPress}
               placeholder="Ask me anything..."
               className="bg-slate-950 text-slate-50 px-4 py-3 text-base flex h-10 w-full max-w-full border ring-offset-background file:border-0 file:bg-transparent file:text-base file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 border-slate-200 focus:border-blue-400 rounded-2xl resize-none"
