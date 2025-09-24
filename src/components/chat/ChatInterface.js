@@ -5,6 +5,7 @@ import { Send, Loader2, XCircle } from "lucide-react";
 import { InvokeLLM } from "../../integrations/Core";
 import MessageBubble from "./MessageBubble";
 import { motion } from "framer-motion";
+import { ArrowRight } from "lucide-react";
 
 export default function ChatInterface({ messages, onSendMessage, onClose }) {
   const [inputText, setInputText] = useState("");
@@ -105,7 +106,11 @@ export default function ChatInterface({ messages, onSendMessage, onClose }) {
               disabled={!inputText.trim() || isLoading}
               className="bg-blue-600 hover:bg-blue-700 text-white rounded-2xl px-4 py-3 h-12"
             >
-              {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
+              {isLoading ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <ArrowRight className="w-4 h-4" />
+              )}
             </Button>
           </motion.div>
         </div>

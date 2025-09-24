@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import YouTube from "react-youtube";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { Play, Settings } from "lucide-react";
+import { Play, Settings, XCircle } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function VideoPlayer({ videoUrl, onVideoChange }) {
@@ -33,7 +33,7 @@ export default function VideoPlayer({ videoUrl, onVideoChange }) {
   };
 
   const onReady = (event) => {
-    event.target.setPlaybackQuality('hd2160');
+    event.target.setPlaybackQuality("hd2160");
   };
 
   const opts = {
@@ -47,14 +47,14 @@ export default function VideoPlayer({ videoUrl, onVideoChange }) {
       autohide: 1,
       showinfo: 1,
       fs: 1,
-      vq: "hd2160" // YouTube may ignore this, but it's worth including
+      vq: "hd2160"
     }
   };
 
   return (
     <div className="relative h-full bg-slate-900 rounded-b-3xl overflow-hidden shadow-2xl">
       {videoId ? (
-        <YouTube videoId={videoId} opts={opts} className="w-full h-full" />
+        <YouTube videoId={videoId} opts={opts} onReady={onReady} className="w-full h-full" />
       ) : (
         <div className="h-full flex items-center justify-center text-white">
           <div className="text-center">
@@ -64,25 +64,41 @@ export default function VideoPlayer({ videoUrl, onVideoChange }) {
         </div>
       )}
 
-      <div className="absolute top-4 right-4 flex gap-2">
-        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => setShowUrlInput(!showUrlInput)}
-            className="bg-white/20 border-white/30 text-white hover:bg-white/30 backdrop-blur-sm"
-          >
-            <Settings className="w-4 h-4" />
-          </Button>
-        </motion.div>
+      {/* Settings and Close Buttons */}
+      <div className="absolute top-4 right-4 flex gap-2 z-50">
+        {!showUrlInput && (
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => setShowUrlInput(true)}
+              className="bg-white/20 border-white/30 text-white hover:bg-white/30 backdrop-blur-sm"
+            >
+              <Settings className="w-6 h-6" />
+            </Button>
+          </motion.div>
+        )}
+
+        {showUrlInput && (
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <Button
+              variant="ghost"
+              onClick={() => setShowUrlInput(false)}
+              className="text-white hover:text-red-400 p-2 rounded-full border border-white/20 shadow-md backdrop-blur-sm"
+            >
+              <XCircle className="w-5 h-5" />
+            </Button>
+          </motion.div>
+        )}
       </div>
 
+      {/* URL Input Panel */}
       {showUrlInput && (
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
-          className="absolute top-16 left-4 right-4 bg-white/95 backdrop-blur-sm rounded-2xl p-4 shadow-xl border border-white/50"
+          className="absolute top-16 left-4 right-4 bg-white/95 backdrop-blur-sm rounded-2xl p-4 shadow-xl border border-white/50 z-40"
         >
           <div className="flex gap-2">
             <Input
@@ -94,7 +110,7 @@ export default function VideoPlayer({ videoUrl, onVideoChange }) {
             />
             <Button
               onClick={handleUrlSubmit}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-6"
+              className="bg-blue-600 hover:bg-blue-700 text-white rounded-2xl px-4 py-3 h-12"
             >
               Load
             </Button>
