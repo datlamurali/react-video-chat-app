@@ -55,7 +55,7 @@ export default function ChatInterface({ messages, onSendMessage }) {
   };
 
   return (
-    <div className="relative h-full">
+    <div className="relative h-full flex flex-col">
       {/* Overlay for chat history */}
       <AnimatePresence>
         {showOverlay && (

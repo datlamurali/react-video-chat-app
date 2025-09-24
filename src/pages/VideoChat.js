@@ -34,12 +34,31 @@ export default function VideoChat() {
       />
 
       {/* Floating Chat Interface */}
-      <div className="fixed bottom-0 left-0 right-0 z-[9999]">
+      <div className="h-1/5 fixed bottom-0 left-0 right-0 z-[9999]">
         <ChatInterface 
           messages={messages}
           onSendMessage={addMessage}
         />
       </div>
     </div>
+
+    //     <div className="h-screen bg-black flex flex-col overflow-hidden">
+    //   {/* Video Section - 80% */}
+    //   <div className="h-4/5 relative">
+    //     <VideoPlayer 
+    //       videoUrl={videoUrl} 
+    //       onVideoChange={setVideoUrl}
+    //     />
+    //   </div>
+      
+    //   {/* Chat Section - 20% */}
+    //   <div className="h-1/5 border-t border-slate-200/50 backdrop-blur-sm bg-white/80">
+    //     <ChatInterface 
+    //       messages={messages}
+    //       onSendMessage={addMessage}
+    //     />
+    //   </div>
+    // </div>
+
   );
 }
