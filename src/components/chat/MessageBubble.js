@@ -10,7 +10,7 @@ export default function MessageBubble({ message }) {
       initial={{ opacity: 0, y: 20, scale: 0.95 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
-      className={`flex gap-3 ${isAi ? 'justify-start' : 'justify-end'}`}
+      className={`flex items-center gap-3 ${isAi ? 'justify-start' : 'justify-end'}`}
     >
       {isAi && (
         <div className="w-8 h-8 rounded-full bg-gradient-to-br from-green-500 to-teal-500 flex items-center justify-center flex-shrink-0 shadow-sm">
@@ -18,16 +18,16 @@ export default function MessageBubble({ message }) {
         </div>
       )}
 
-      <div className="bg-slate-950 text-slate-800 px-4 py-3 max-w-xs lg:max-w-sm rounded-2xl shadow-sm border border-slate-100 rounded-bl-md">
-        <p className="text-slate-300 text-sm leading-relaxed whitespace-pre-wrap">
+      <div className="bg-slate-950 text-slate-800 px-4 py-2 rounded-2xl shadow-sm border border-slate-100 rounded-bl-md flex items-center max-w-[80%] overflow-hidden">
+        <p className="text-slate-300 text-sm truncate">
           {text}
         </p>
-        <div className="bg-slate-950 text-slate-50 mt-2 text-xs opacity-70">
+        <span className="ml-3 text-xs text-slate-400 flex-shrink-0">
           {timestamp.toLocaleTimeString([], {
             hour: '2-digit',
             minute: '2-digit'
           })}
-        </div>
+        </span>
       </div>
 
       {!isAi && (

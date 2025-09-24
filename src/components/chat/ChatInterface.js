@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
-import { Send, Loader2, X } from "lucide-react";
+import { Send, Loader2, XCircle } from "lucide-react";
 import { InvokeLLM } from "../../integrations/Core";
 import MessageBubble from "./MessageBubble";
 import { motion } from "framer-motion";
@@ -38,7 +38,7 @@ export default function ChatInterface({ messages, onSendMessage, onClose }) {
       onSendMessage("I'm sorry, I encountered an error. Please try again!", true);
     } finally {
       setIsLoading(false);
-      inputRef.current?.focus();
+      inputRef.current?.focus(); // Refocus input
     }
   };
 
@@ -51,14 +51,14 @@ export default function ChatInterface({ messages, onSendMessage, onClose }) {
 
   return (
     <div className="h-full w-full bg-black border-t border-slate-200/50">
-      {/* Close Button */}
+      {/* Stylish Close Button */}
       <div className="absolute top-2 right-4 z-[10000]">
         <Button
           variant="ghost"
           onClick={onClose}
-          className="text-white hover:text-red-400 p-2"
+          className="text-white hover:text-red-400 p-2 rounded-full border border-white/20 shadow-md backdrop-blur-sm"
         >
-          <X className="w-5 h-5" />
+          <XCircle className="w-5 h-5" />
         </Button>
       </div>
 
@@ -95,7 +95,7 @@ export default function ChatInterface({ messages, onSendMessage, onClose }) {
               onChange={(e) => setInputText(e.target.value)}
               onKeyPress={handleKeyPress}
               placeholder="Ask me anything..."
-              className="bg-slate-950 text-slate-50 px-4 py-3 text-base flex h-10 w-full max-w-full border ring-offset-background file:border-0 file:bg-transparent file:text-base file:font-medium file:text-foreground placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 border-slate-200 focus:border-blue-400 rounded-2xl resize-none"
+              className="bg-slate-950 text-slate-50 px-4 py-3 text-base h-12 w-full border border-slate-200 focus:border-blue-400 rounded-2xl resize-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               disabled={isLoading}
             />
           </div>
@@ -103,7 +103,7 @@ export default function ChatInterface({ messages, onSendMessage, onClose }) {
             <Button
               onClick={handleSend}
               disabled={!inputText.trim() || isLoading}
-              className="bg-blue-600 hover:bg-blue-700 text-white rounded-2xl px-4 py-3 min-w-[48px] h-12"
+              className="bg-blue-600 hover:bg-blue-700 text-white rounded-2xl px-4 py-3 h-12"
             >
               {isLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
             </Button>

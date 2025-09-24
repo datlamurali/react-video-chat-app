@@ -32,7 +32,7 @@ export default function VideoChat() {
         <VideoPlayer videoUrl={videoUrl} onVideoChange={setVideoUrl} />
       </div>
 
-      {/* Tap Area - 20% */}
+      {/* Bottom 20% - Tap to reveal chat */}
       <div className="h-[20vh] relative">
         {!chatVisible ? (
           <div
