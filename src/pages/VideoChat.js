@@ -25,40 +25,23 @@ export default function VideoChat() {
   };
 
   return (
-    <div className="relative h-screen bg-black overflow-hidden">
+    <div className="relative h-screen w-screen bg-black overflow-hidden">
       {/* Fullscreen Video */}
-      <VideoPlayer 
-        videoUrl={videoUrl} 
-        onVideoChange={setVideoUrl}
-        className="w-full h-full"
-      />
+      <div className="absolute inset-0 z-0">
+        <VideoPlayer 
+          videoUrl={videoUrl} 
+          onVideoChange={setVideoUrl}
+          className="w-full h-full object-cover"
+        />
+      </div>
 
-      {/* Floating Chat Interface */}
-      <div className="h-1/5 fixed bottom-0 left-0 right-0 z-[9999]">
+      {/* Chat Interface overlays on top of video */}
+      <div className="absolute inset-0 z-10 flex flex-col justify-end pointer-events-none">
         <ChatInterface 
           messages={messages}
           onSendMessage={addMessage}
         />
       </div>
     </div>
-
-    //     <div className="h-screen bg-black flex flex-col overflow-hidden">
-    //   {/* Video Section - 80% */}
-    //   <div className="h-4/5 relative">
-    //     <VideoPlayer 
-    //       videoUrl={videoUrl} 
-    //       onVideoChange={setVideoUrl}
-    //     />
-    //   </div>
-      
-    //   {/* Chat Section - 20% */}
-    //   <div className="h-1/5 border-t border-slate-200/50 backdrop-blur-sm bg-white/80">
-    //     <ChatInterface 
-    //       messages={messages}
-    //       onSendMessage={addMessage}
-    //     />
-    //   </div>
-    // </div>
-
   );
 }
