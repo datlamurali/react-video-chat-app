@@ -19,7 +19,7 @@ export default function VideoPlayer({ videoUrl, onVideoChange }) {
         videoId = urlObj.pathname.slice(1);
       }
       
-      return videoId ? `https://www.youtube.com/embed/\${videoId}` : null;
+      return videoId ? `https://www.youtube.com/embed/\${videoId}` : `https://www.youtube.com/embed/6pxRHBw-k8M`;
     } catch {
       return null;
     }
