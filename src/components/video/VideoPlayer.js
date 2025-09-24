@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import YouTube from "react-youtube";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Play, Settings } from "lucide-react";
@@ -8,24 +9,20 @@ export default function VideoPlayer({ videoUrl, onVideoChange }) {
   const [showUrlInput, setShowUrlInput] = useState(false);
   const [tempUrl, setTempUrl] = useState("");
 
-  const getYouTubeEmbedUrl = (url) => {
+  const extractVideoId = (url) => {
     try {
       const urlObj = new URL(url);
-      let videoId = "";
-      
-      if (urlObj.hostname.includes('youtube.com')) {
-        videoId = urlObj.searchParams.get('v');
-      } else if (urlObj.hostname.includes('youtu.be')) {
-        videoId = urlObj.pathname.slice(1);
+      if (urlObj.hostname.includes("youtube.com")) {
+        return urlObj.searchParams.get("v");
+      } else if (urlObj.hostname.includes("youtu.be")) {
+        return urlObj.pathname.slice(1);
       }
-      
-      return videoId ? `https://www.youtube.com/embed/\${videoId}` : `https://www.youtube.com/embed/6pxRHBw-k8M`;
     } catch {
       return null;
     }
   };
 
-  const embedUrl = getYouTubeEmbedUrl(videoUrl);
+  const videoId = extractVideoId(videoUrl) || "6pxRHBw-k8M";
 
   const handleUrlSubmit = () => {
     if (tempUrl.trim()) {
@@ -35,17 +32,25 @@ export default function VideoPlayer({ videoUrl, onVideoChange }) {
     }
   };
 
+const opts = {
+  height: "100%",
+  width: "100%",
+  playerVars: {
+    autoplay: 0,
+    playsinline: 1,
+    rel: 0,
+    modestbranding: 0,
+    autohide: 1,
+    showinfo: 1,
+    fs: 1,
+    vq: "hd2160" // YouTube may ignore this, but it's worth including
+  }
+};
+
   return (
     <div className="relative h-full bg-slate-900 rounded-b-3xl overflow-hidden shadow-2xl">
-      {embedUrl ? (
-        <iframe
-          src={embedUrl}
-          title="YouTube video player"
-          className="w-full h-full"
-          frameBorder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-        />
+      {videoId ? (
+        <YouTube videoId={videoId} opts={opts} className="w-full h-full" />
       ) : (
         <div className="h-full flex items-center justify-center text-white">
           <div className="text-center">
@@ -56,10 +61,7 @@ export default function VideoPlayer({ videoUrl, onVideoChange }) {
       )}
 
       <div className="absolute top-4 right-4 flex gap-2">
-        <motion.div
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
+        <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
           <Button
             variant="outline"
             size="icon"
@@ -84,7 +86,7 @@ export default function VideoPlayer({ videoUrl, onVideoChange }) {
               value={tempUrl}
               onChange={(e) => setTempUrl(e.target.value)}
               className="flex-1 border-slate-200 focus:border-blue-400"
-              onKeyPress={(e) => e.key === 'Enter' && handleUrlSubmit()}
+              onKeyPress={(e) => e.key === "Enter" && handleUrlSubmit()}
             />
             <Button
               onClick={handleUrlSubmit}
