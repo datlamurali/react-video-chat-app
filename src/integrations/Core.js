@@ -1,6 +1,6 @@
 export async function InvokeLLM({ prompt }) {
   try {
-    const response = await fetch('/api/invoke-llm', {
+    const response = await fetch('https://datlam-opglxkphn-datlamuralis-projects.vercel.app/api/invoke-llm', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ prompt })
