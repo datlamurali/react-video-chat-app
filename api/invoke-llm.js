@@ -9,9 +9,7 @@ export default async function handler(req, res) {
 
   if (allowedOrigin && allowedOrigin.endsWith('.vercel.app')) {
     res.setHeader('Access-Control-Allow-Origin', allowedOrigin);
-  } else {
-    res.setHeader('Access-Control-Allow-Origin', 'https://react-video-chat-3i0lkiz43-datlamuralis-projects.vercel.app'); // fallback or deny
-  }
+  } 
 
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
