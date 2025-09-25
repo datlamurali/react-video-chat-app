@@ -1,10 +1,18 @@
+const backendURL = import.meta.env.VITE_BACKEND_URL;
+
 export async function InvokeLLM({ prompt }) {
   try {
-    const response = await fetch('https://datlam-opglxkphn-datlamuralis-projects.vercel.app/api/invoke-llm', {
+    const response = await fetch(`${backendURL}/api/invoke-llm`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt })
+      body: JSON.stringify({ prompt }),
     });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Server error:", response.status, errorText);
+      return `Server error (${response.status}): ${errorText}`;
+    }
 
     const data = await response.json();
     return data.reply;

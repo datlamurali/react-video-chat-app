@@ -5,6 +5,23 @@ const openai = new OpenAI({
 });
 
 export default async function handler(req, res) {
+  const allowedOrigin = req.headers.origin;
+
+  if (allowedOrigin && allowedOrigin.endsWith('.vercel.app')) {
+    res.setHeader('Access-Control-Allow-Origin', allowedOrigin);
+  } else {
+    res.setHeader('Access-Control-Allow-Origin', 'https://react-video-chat-3i0lkiz43-datlamuralis-projects.vercel.app'); // fallback or deny
+  }
+
+  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
+
+  // ✅ Handle POST
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
@@ -13,10 +30,10 @@ export default async function handler(req, res) {
 
   try {
     const response = await openai.chat.completions.create({
-      model: 'gpt-5',
+      model: 'gpt-4', // Use 'gpt-4' unless you're explicitly approved for 'gpt-5'
       messages: [
         { role: 'system', content: 'You are ChatGPT, a helpful assistant.' },
-        { role: 'user', content: prompt }
+        { role: 'user', content: prompt },
       ],
     });
 
