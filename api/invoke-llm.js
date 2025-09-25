@@ -13,7 +13,7 @@ export default async function handler(req, res) {
 
   try {
     const response = await openai.chat.completions.create({
-      model: 'gpt-4',
+      model: 'gpt-5',
       messages: [
         { role: 'system', content: 'You are ChatGPT, a helpful assistant.' },
         { role: 'user', content: prompt }
